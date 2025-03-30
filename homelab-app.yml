@@ -17,7 +17,7 @@ data:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd-homelab
+  name: homelab-ns
   namespace: argocd
 spec:
   project: default
