@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: photon
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: git@codeberg.org:terminalnode/k8s-homelab.git
+    targetRevision: HEAD
+    path: manifests/photon
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: photon
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true
