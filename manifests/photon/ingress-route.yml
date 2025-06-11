@@ -13,3 +13,8 @@ spec:
       services:
         - name: photon-service
           port: 80
+  tls:
+    secretName: photon-tls-secret
+    issuerRef:
+      name: letsencrypt-staging
+      kind: ClusterIssuer
