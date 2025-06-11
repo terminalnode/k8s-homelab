@@ -1,0 +1,15 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: photon-ingressroute
+spec:
+  entryPoints:
+    - web
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`phtn.termz.xyz`) || Host(`phtn.terminalnode.xyz`)
+      priority: 10
+      services:
+        - name: photon-service
+          port: 80
