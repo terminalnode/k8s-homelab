@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: photon-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+    kubernetes.io/ingress.class: "traefik" 
+spec:
+  tls:
+  - hosts:
+    - phtn.termz.xyz
+    - phtn.terminalnode.xyz
+    secretName: photon-tls-secret
+  rules:
+  - host: "phtn.termz.xyz"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: photon-service
+            port:
+              number: 80
+  - host: "phtn.terminalnode.xyz"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: photon-service
+            port:
+              number: 80
