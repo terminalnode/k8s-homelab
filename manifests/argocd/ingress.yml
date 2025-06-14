@@ -1,11 +1,10 @@
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: argocd-server
-  namespace: argocd
+  name: argocd-server-ingressroute
 spec:
   entryPoints:
-    - web
+    - websecure
   routes:
     - kind: Rule
       match: Host(`argocd.termz.xyz`) || Host(`argocd.terminalnode.xyz`)
@@ -20,5 +19,5 @@ spec:
         - name: argocd-server
           port: http
           scheme: h2c
-#  tls:
-#    certResolver: default
+  tls:
+    secretName: argocd-tls-secret
