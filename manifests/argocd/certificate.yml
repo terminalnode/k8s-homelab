@@ -5,7 +5,7 @@ metadata:
 spec:
   secretName: argocd-tls-secret
   issuerRef:
-    name: letsencrypt-staging
+    name: letsencrypt-prod
     kind: ClusterIssuer
   commonName: argocd.termz.xyz
   dnsNames:
