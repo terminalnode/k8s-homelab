@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: gwaidns
+  name: gwaidns
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gwaidns
+  template:
+    metadata:
+      labels:
+        app: gwaidns
+    spec:
+      volumes:
+      - name: corefile-vol
+        configMap:
+          name: 'corefile-cm'
+      containers:
+      - image: coredns/coredns:1.12.2
+        name: coredns
+        args: [ "-conf", "/etc/coredns/Corefile" ]
+        ports:
+        - name: gwaidns-udp
+          containerPort: 53
+          hostPort: 53
+          protocol: UDP
+        - name: gwaidns-tcp
+          containerPort: 53
+          hostPort: 53
+          protocol: TCP
+        volumeMounts:
+        - name: corefile-vol
+          mountPath: /etc/coredns

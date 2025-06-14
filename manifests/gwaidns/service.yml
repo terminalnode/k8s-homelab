@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: gwaidns-svc
+  name: gwaidns-svc
+spec:
+  ports:
+  - name: "tcp"
+    port: 53
+    protocol: TCP
+    targetPort: 53
+  - name: "udp"
+    port: 53
+    protocol: UDP
+    targetPort: 53
+  selector:
+    app: gwaidns
+  type: NodePort
