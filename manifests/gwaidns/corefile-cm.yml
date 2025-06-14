@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: corefile-cm
+  labels:
+    app: gwaidns
+
+data:
+  Corefile: |
+    .:53 {
+      forward . 9.9.9.9 149.112.112.112
+      log
+      errors
+      health :8080
+    }
+
+    gwai:53 {
+      file /etc/coredns/records.gwai
+      log
+      errors
+    }
+
+  records.gwai: |
+    @ IN SOA  k8s.gwai. alex.gwai.se. 2506141757 7200 3600 1209600 3600
+    k8s IN A    10.69.96.101
+    k8s IN A    10.69.96.102
+    k8s IN A    10.69.96.103
+    k8s IN AAAA fd69::101
+    k8s IN AAAA fd69::102
+    k8s IN AAAA fd69::103
+
+    ; Machines
+    dahongpao        IN AAAA fd69::1
+    tieguanyin       IN AAAA fd69::2
+    jinjunmei-legacy IN AAAA fd69::3
+    jinjunmei        IN AAAA fd69::4
+
+    ; Machines legacy IPs
+    dahongpao        IN A 10.69.96.1
+    tieguanyin       IN A 10.69.96.2
+    jinjunmei-legacy IN A 10.69.96.3
+    jinjunmei        IN A 10.69.96.4
+
+    ; Machine CNAMEs
+    dhp        IN CNAME dahongpao.
+    tgy        IN CNAME tieguanyin.
+    jjm-legacy IN CNAME jinjunmei-legacy.
+    jjm        IN CNAME jinjunmei.
+    proxmox    IN CNAME jinjunmei.
+
+    ; Kubernetes service CNAMEs
+    phtn     IN CNAME k8s.gwai.
+
+    ; Legacy service CNAMEs
+    pihole      IN CNAME jjm-legacy.gwai.
+    dns         IN CNAME jjm-legacy.gwai.
+    torrents    IN CNAME jjm-legacy.gwai.
+    ollama      IN CNAME jjm-legacy.gwai.
+    vaultwarden IN CNAME jjm-legacy.gwai.
+    vw          IN CNAME jjm-legacy.gwai.
+    jellyfin    IN CNAME jjm-legacy.gwai.
+    jf          IN CNAME jjm-legacy.gwai.
+    rss         IN CNAME jjm-legacy.gwai.
+    pics        IN CNAME jjm-legacy.gwai.
+    piga        IN CNAME jjm-legacy.gwai.
