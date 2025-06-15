@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: argocd-dot-gwai-cert
+spec:
+  secretName: argocd-dot-gwai-secret
+  issuerRef:
+    name: dot-gwai-ciss
+    kind: ClusterIssuer
+  commonName: "Gwainet ArgoCD Service"
+  dnsNames:
+  - argocd.gwai
