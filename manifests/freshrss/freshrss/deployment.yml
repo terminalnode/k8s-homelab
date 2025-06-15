@@ -50,10 +50,10 @@ spec:
             --db-type pgsql
             --db-user $(DB_USER)
             --default-user alex
+        #    --password password
         - name: FRESHRSS_USER
           value: |-
             --user alex
-            --password password
             --email alex@gwai.se
             --language en
         ports:
