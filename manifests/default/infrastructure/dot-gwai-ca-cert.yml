@@ -1,0 +1,23 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: dot-gwai-ca-cert
+  namespace: cert-manager
+spec:
+  isCA: true
+  commonName: 'Gwainet CA'
+  secretName: dot-gwai-ca-secret
+  usages:
+  - "cert sign"
+  - "crl sign"
+  - "digital signature"
+  subject:
+    organizations: [ 'Gwai' ]
+    countries: [ 'NO' ]
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: dot-gwai-root-certificate
+    kind: ClusterIssuer
+    group: cert-manager.io

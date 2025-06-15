@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: photon-ingress
   annotations:
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod-ciss"
     kubernetes.io/ingress.class: "traefik" 
 spec:
   tls:
@@ -13,7 +13,7 @@ spec:
     secretName: photon-tls-secret
   rules:
   - host: "phtn.termz.xyz"
-    http:
+    http: &http-routing
       paths:
       - path: /
         pathType: Prefix
@@ -23,7 +23,26 @@ spec:
             port:
               number: 80
   - host: "phtn.terminalnode.xyz"
-    http:
+    http: *http-routing
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: photon-gwai-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: "dot-gwai-ciss"
+    cert-manager.io/common-name: "Gwainet Photon Service"
+    kubernetes.io/ingress.class: "traefik" 
+spec:
+  tls:
+  - hosts:
+    - phtn.gwai
+    secretName: dot-gwai-ca-secret
+  rules:
+  - host: "phtn.gwai"
+    http: &http-routing
       paths:
       - path: /
         pathType: Prefix
