@@ -22,7 +22,7 @@ data:
     }
 
   records.gwai: |
-    @ IN SOA  k8s.gwai. alex.gwai.se. 2506141757 7200 3600 1209600 3600
+    @ IN SOA    k8s.gwai. alex.gwai.se. 2506141757 7200 3600 1209600 3600
     k8s IN A    10.69.96.101
     k8s IN A    10.69.96.102
     k8s IN A    10.69.96.103
@@ -50,17 +50,17 @@ data:
     proxmox    IN CNAME jinjunmei.
 
     ; Kubernetes service CNAMEs
-    phtn     IN CNAME k8s.gwai.
+    phtn IN CNAME k8s.gwai.
+    rss  IN CNAME k8s.gwai.
 
     ; Legacy service CNAMEs
-    pihole      IN CNAME jjm-legacy.gwai.
-    dns         IN CNAME jjm-legacy.gwai.
-    torrents    IN CNAME jjm-legacy.gwai.
-    ollama      IN CNAME jjm-legacy.gwai.
-    vaultwarden IN CNAME jjm-legacy.gwai.
-    vw          IN CNAME jjm-legacy.gwai.
-    jellyfin    IN CNAME jjm-legacy.gwai.
-    jf          IN CNAME jjm-legacy.gwai.
-    rss         IN CNAME jjm-legacy.gwai.
-    pics        IN CNAME jjm-legacy.gwai.
-    piga        IN CNAME jjm-legacy.gwai.
+    pihole      IN CNAME jinjunmei-legacy.gwai.
+    dns         IN CNAME jinjunmei-legacy.gwai.
+    torrents    IN CNAME jinjunmei-legacy.gwai.
+    ollama      IN CNAME jinjunmei-legacy.gwai.
+    vaultwarden IN CNAME jinjunmei-legacy.gwai.
+    vw          IN CNAME jinjunmei-legacy.gwai.
+    jellyfin    IN CNAME jinjunmei-legacy.gwai.
+    jf          IN CNAME jinjunmei-legacy.gwai.
+    pics        IN CNAME jinjunmei-legacy.gwai.
+    piga        IN CNAME jinjunmei-legacy.gwai.
