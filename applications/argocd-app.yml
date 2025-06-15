@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: git@codeberg.org:terminalnode/k8s-homelab.git
     targetRevision: HEAD
-    path: manifests/argocd
+    path: manifests/default/argocd
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
