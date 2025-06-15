@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: dot-gwai-ca-cert
+  namespace: cert-manager
+spec:
+  isCA: true
+  commonName: dot-gwai-ca
+  secretName: dot-gwai-ca-secret
+  dnsNames:
+  - gwai
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: dot-gwai-root-certificate
+    kind: ClusterIssuer
+    group: cert-manager.io
