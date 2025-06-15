@@ -44,10 +44,10 @@ data:
 
     ; Machine CNAMEs
     dhp        IN CNAME dahongpao.
-    tgy        IN CNAME tieguanyin.
-    jjm-legacy IN CNAME jinjunmei-legacy.
-    jjm        IN CNAME jinjunmei.
-    proxmox    IN CNAME jinjunmei.
+    tgy        IN CNAME tieguanyin.gwai.
+    jjm-legacy IN CNAME jinjunmei-legacy.gwai.
+    jjm        IN CNAME jinjunmei.gwai.
+    proxmox    IN CNAME jinjunmei.gwai.
 
     ; Kubernetes service CNAMEs
     phtn IN CNAME k8s.gwai.
