@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   labels:
     app: freshrss
   name: freshrss-deploy
@@ -12,7 +11,6 @@ spec:
       app: freshrss
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: freshrss
     spec:
@@ -22,6 +20,9 @@ spec:
         envFrom:
         - configMapRef:
             name: freshrss-cm
+        - secretRef:
+            name: 'freshrss-admin-secret'
+            optional: true
         env:
         - name: TRUSTED_PROXY
           value: "10.0.0.0/8 172.16.0.0/12 192.168.0.0/16"
@@ -49,12 +50,12 @@ spec:
             --db-password $(DB_PASSWORD)
             --db-type pgsql
             --db-user $(DB_USER)
-            --default-user alex
-        #    --password password
+            --default-user $(ADMIN_USERNAME)
         - name: FRESHRSS_USER
           value: |-
-            --user alex
-            --email alex@gwai.se
+            --user $(ADMIN_USERNAME)
+            --email $(ADMIN_EMAIL)
+            --password $(ADMIN_PASSWORD)
             --language en
         ports:
         - containerPort: 80

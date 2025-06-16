@@ -7,3 +7,8 @@ metadata:
 data:
   CRON_MIN: '1,29'
   TZ: 'Europe/Oslo'
+
+  # Default values, can be overridden with secret!
+  ADMIN_USERNAME: alex
+  ADMIN_PASSWORD: default-password
+  ADMIN_EMAIL: default@gwai.se
