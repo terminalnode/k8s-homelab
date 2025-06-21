@@ -1,18 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gwaidns
+  name: gwaidns-1
   labels:
-    app: gwaidns
+    app.kubernetes.io/name: gwaidns
+    app.kubernetes.io/instance: gwaidns-1
+    app.kubernetes.io/component: coredns
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: gwaidns
+      app.kubernetes.io/name: gwaidns
+      app.kubernetes.io/instance: gwaidns-1
+      app.kubernetes.io/component: coredns
   template:
     metadata:
       labels:
-        app: gwaidns
+        app.kubernetes.io/name: gwaidns
+        app.kubernetes.io/instance: gwaidns-1
+        app.kubernetes.io/component: coredns
     spec:
       volumes:
       - name: corefile-vol
@@ -20,7 +26,45 @@ spec:
           name: 'corefile-cm'
       containers:
       - image: coredns/coredns:1.12.2
-        name: gwaidns
+        name: gwaidns-1
+        args: [ "-conf", "/etc/coredns/Corefile" ]
+        ports:
+        - containerPort: 53
+        volumeMounts:
+        - name: corefile-vol
+          mountPath: /etc/coredns
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gwaidns-2
+  labels:
+    app.kubernetes.io/name: gwaidns
+    app.kubernetes.io/instance: gwaidns-2
+    app.kubernetes.io/component: coredns
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gwaidns
+      app.kubernetes.io/instance: gwaidns-2
+      app.kubernetes.io/component: coredns
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: gwaidns
+        app.kubernetes.io/instance: gwaidns-2
+        app.kubernetes.io/component: coredns
+    spec:
+      volumes:
+      - name: corefile-vol
+        configMap:
+          name: 'corefile-cm'
+      containers:
+      - image: coredns/coredns:1.12.2
+        name: gwaidns-2
         args: [ "-conf", "/etc/coredns/Corefile" ]
         ports:
         - containerPort: 53
