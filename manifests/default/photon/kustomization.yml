@@ -1,0 +1,5 @@
+resources:
+- ingress.yml
+- sa-photon.yml
+- deployment.yml
+- service.yml

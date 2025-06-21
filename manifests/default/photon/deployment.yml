@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   labels:
     app: photon
   name: photon-deployment
@@ -10,15 +9,12 @@ spec:
   selector:
     matchLabels:
       app: photon
-  strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: photon
     spec:
+      serviceAccountName: photon-sa
       containers:
       - image: ghcr.io/xyphyn/photon:v1.31.4
         name: photon
-        resources: {}
-status: {}
