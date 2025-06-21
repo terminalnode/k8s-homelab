@@ -1,6 +1,7 @@
 resources:
 - deployment.yml
-- service.yml
+- metallb.yml
+- nodeport.yml
 
 configMapGenerator:
 - name: corefile-cm
