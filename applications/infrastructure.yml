@@ -34,7 +34,7 @@ spec:
   - server: 'https://kubernetes.default.svc'
     namespace: cnpg-system
   - server: 'https://kubernetes.default.svc'
-    namespace: metallb
+    namespace: metallb-system
 
 ---
 
@@ -164,7 +164,7 @@ spec:
     targetRevision: '0.15.2' 
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: 'metallb' 
+    namespace: 'metallb-system' 
   syncPolicy:
     automated:
       prune: true
