@@ -1,8 +1,6 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
-metadata:
-  name: infrastructure
-  namespace: argocd
+metadata: { name: infrastructure, namespace: argocd }
 spec:
   description: 'Resources related to running the cluster'
   clusterResourceWhitelist:
@@ -16,10 +14,14 @@ spec:
     kind: '*'
   - group: 'admissionregistration.k8s.io'
     kind: '*'
+  - group: ''
+    kind: 'Namespace'
   sourceRepos:
   - 'git@codeberg.org:terminalnode/k8s-homelab.git'
   - 'https://charts.jetstack.io'
   - 'https://cloudnative-pg.github.io/charts'
+  - 'https://cloudnative-pg.github.io/charts'
+  - 'https://metallb.github.io/metallb'
   destinations:
   - server: 'https://kubernetes.default.svc'
     namespace: infrastructure
@@ -31,14 +33,14 @@ spec:
     namespace: argocd
   - server: 'https://kubernetes.default.svc'
     namespace: cnpg-system
+  - server: 'https://kubernetes.default.svc'
+    namespace: metallb
 
 ---
 
 apiVersion: argoproj.io/v1alpha1
 kind: Application
-metadata:
-  name: letsencrypt
-  namespace: argocd
+metadata: { name: letsencrypt, namespace: argocd }
 spec:
   project: infrastructure
   source:
@@ -59,9 +61,7 @@ spec:
 
 apiVersion: argoproj.io/v1alpha1
 kind: Application
-metadata:
-  name: clusterconfig
-  namespace: argocd
+metadata: { name: clusterconfig, namespace: argocd }
 spec:
   project: infrastructure
   source:
@@ -82,9 +82,26 @@ spec:
 
 apiVersion: argoproj.io/v1alpha1
 kind: Application
-metadata:
-  name: cert-manager
-  namespace: argocd
+metadata: { name: argocd, namespace: argocd }
+spec:
+  project: infrastructure
+  source:
+    repoURL: git@codeberg.org:terminalnode/k8s-homelab.git
+    targetRevision: HEAD
+    path: manifests/infrastructure/argocd
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata: { name: cert-manager, namespace: argocd }
 spec:
   project: infrastructure
   destination:
@@ -135,18 +152,23 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd
+  name: metallb
   namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
 spec:
   project: infrastructure
   source:
-    repoURL: git@codeberg.org:terminalnode/k8s-homelab.git
-    targetRevision: HEAD
-    path: manifests/infrastructure/argocd
+    repoURL: 'https://metallb.github.io/metallb'
+    chart: metallb
+    targetRevision: '0.15.2' 
   destination:
-    server: https://kubernetes.default.svc
-    namespace: argocd
+    server: 'https://kubernetes.default.svc'
+    namespace: 'metallb' 
   syncPolicy:
     automated:
-      selfHeal: true
       prune: true
+      selfHeal: true
+    syncOptions:
+    - ServerSideApply=true
+    - CreateNamespace=true
