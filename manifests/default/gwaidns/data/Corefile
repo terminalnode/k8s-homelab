@@ -1,0 +1,12 @@
+.:53 {
+  forward . 9.9.9.9 149.112.112.112
+  log
+  errors
+  health :8080
+}
+
+gwai:53 {
+  file /etc/coredns/records.gwai
+  log
+  errors
+}

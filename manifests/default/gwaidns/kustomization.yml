@@ -1,0 +1,9 @@
+resources:
+- deployment.yml
+- service.yml
+
+configMapGenerator:
+- name: corefile-cm
+  files:
+  - Corefile=data/Corefile
+  - records.gwai=data/records.gwai
