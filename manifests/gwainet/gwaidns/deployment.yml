@@ -20,7 +20,7 @@ spec:
           name: 'corefile-cm'
       containers:
       - image: coredns/coredns:1.12.2
-        name: coredns
+        name: gwaidns
         args: [ "-conf", "/etc/coredns/Corefile" ]
         ports:
         - containerPort: 53

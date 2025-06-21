@@ -1,0 +1,35 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: gwainet
+  namespace: argocd
+spec:
+  description: 'Apps for GwaiNet'
+  sourceRepos:
+  - 'git@codeberg.org:terminalnode/k8s-homelab.git'
+  destinations:
+  - server: 'https://kubernetes.default.svc'
+    namespace: gwainet
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gwainet
+  namespace: argocd
+spec:
+  project: gwainet
+  source:
+    repoURL: git@codeberg.org:terminalnode/k8s-homelab.git
+    targetRevision: HEAD
+    path: manifests/gwainet/gwaidns
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gwainet
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    automated:
+      selfHeal: true
+      prune: true

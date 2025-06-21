@@ -13,9 +13,7 @@ spec:
     protocol: UDP
     port: 53
     targetPort: 53
-    nodePort: 30053
   - name: "tcp"
     port: 53
     protocol: TCP
     targetPort: 53
-    nodePort: 31053
