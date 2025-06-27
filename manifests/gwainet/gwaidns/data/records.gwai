@@ -1,22 +1,22 @@
 @ IN SOA    k8s.gwai. alex.gwai.se. 2506141757 7200 3600 1209600 3600
 
 ; Machine IPs
-dahongpao        IN AAAA fd69::1
-tieguanyin       IN AAAA fd69::2
-jinjunmei-legacy IN AAAA fd69::3
-jinjunmei        IN AAAA fd69::4
-k8s              IN AAAA fd69::101
-k8s              IN AAAA fd69::102
-k8s              IN AAAA fd69::103
+dahongpao        IN AAAA fd88::1
+tieguanyin       IN AAAA fd88::2
+jinjunmei-legacy IN AAAA fd88::3
+jinjunmei        IN AAAA fd88::4
+k8s              IN AAAA fd85::1
+k8s              IN AAAA fd85::2
+k8s              IN AAAA fd85::3
 
 ; Machines legacy IPs
-dahongpao        IN A 10.69.96.1
-tieguanyin       IN A 10.69.96.2
-jinjunmei-legacy IN A 10.69.96.3
-jinjunmei        IN A 10.69.96.4
-k8s              IN A 10.69.96.101
-k8s              IN A 10.69.96.102
-k8s              IN A 10.69.96.103
+dahongpao        IN A 10.88.88.1
+tieguanyin       IN A 10.88.88.2
+jinjunmei-legacy IN A 10.88.88.3
+jinjunmei        IN A 10.88.88.4
+k8s              IN A 10.88.85.1
+k8s              IN A 10.88.85.2
+k8s              IN A 10.88.85.3
 
 ; Machine CNAMEs
 dhp        IN CNAME dahongpao.gwai.
