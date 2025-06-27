@@ -1,0 +1,57 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: miniflux-ingress
+  labels:
+    app: miniflux
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod-ciss"
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  tls:
+  - hosts:
+    - mflux.termz.xyz
+    - mflux.terminalnode.xyz
+    secretName: miniflux-tls-secret
+  rules:
+  - host: "mflux.termz.xyz"
+    http: &http-routing
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: miniflux-svc
+            port:
+              number: 80
+  - host: "mflux.terminalnode.xyz"
+    http: *http-routing
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mflux-dot-gwai-ingress
+  labels:
+    app: miniflux
+  annotations:
+    cert-manager.io/cluster-issuer: "dot-gwai-ciss"
+    cert-manager.io/common-name: "Gwainet MiniFlux Service"
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  tls:
+  - hosts:
+    - mflux.gwai
+    secretName: dot-gwai-ca-secret
+  rules:
+  - host: "mflux.gwai"
+    http: &http-routing
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: miniflux-svc
+            port:
+              number: 80

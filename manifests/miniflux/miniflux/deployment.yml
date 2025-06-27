@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: miniflux
+  name: miniflux-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: miniflux
+  template:
+    metadata:
+      labels:
+        app: miniflux
+    spec:
+      serviceAccountName: miniflux-sa
+      containers:
+      - image: ghcr.io/miniflux/miniflux:2.2.10
+        name: miniflux
+        env:
+        - name: ADMIN_USERNAME
+          value: "admin"
+        - name: ADMIN_PASSWORD
+          value: "password"
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: 'miniflux-cluster-app'
+              key: 'username'
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: 'miniflux-cluster-app'
+              key: 'password'
+        - name: DATABASE_URL
+          value: postgres://$(DB_USER):$(DB_PASSWORD)@miniflux-cluster-rw/miniflux?sslmode=disable
+        command:
+        - 'sh'
+        - '-c'
+        - |
+          miniflux -migrate \
+          | grep "Current schema version: 0" \
+          && miniflux -create-admin \
+          || echo 'Schema already existed - skipping admin user creation.'
+          miniflux
+        livenessProbe:
+          exec:
+            command: [ 'miniflux', '-healthcheck', 'http://localhost:8080' ]
+          periodSeconds: 5
+        ports:
+        - name: http
+          containerPort: 8080
