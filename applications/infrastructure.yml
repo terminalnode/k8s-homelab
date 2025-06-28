@@ -97,6 +97,8 @@ kind: Application
 metadata:
   name: cnpg-operator
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
@@ -123,6 +125,8 @@ kind: Application
 metadata:
   name: metallb
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
@@ -149,6 +153,8 @@ kind: Application
 metadata:
   name: minio
   namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
   finalizers:
   - resources-finalizer.argocd.argoproj.io
 spec:
