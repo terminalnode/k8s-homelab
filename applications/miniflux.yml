@@ -7,9 +7,12 @@ spec:
   description: 'App for Miniflux'
   sourceRepos:
   - 'git@codeberg.org:terminalnode/k8s-homelab.git'
+  - 'https://operator.min.io'
   destinations:
   - server: 'https://kubernetes.default.svc'
     namespace: miniflux
+  - server: 'https://kubernetes.default.svc'
+    namespace: argocd
 
 ---
 
@@ -46,12 +49,14 @@ kind: Application
 metadata:
   name: miniflux-db
   namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
 spec:
   project: miniflux
-  source:
-    repoURL: git@codeberg.org:terminalnode/k8s-homelab.git
-    targetRevision: HEAD
-    path: manifests/miniflux/miniflux-db
+  sources:
+    - repoURL: git@codeberg.org:terminalnode/k8s-homelab.git
+      targetRevision: HEAD
+      path: manifests/miniflux/miniflux-db
   destination:
     server: https://kubernetes.default.svc
     namespace: miniflux
@@ -61,3 +66,39 @@ spec:
     automated:
       selfHeal: true
       prune: false
+
+# ---
+# 
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: miniflux-db-minio
+#   namespace: argocd
+#   finalizers:
+#   - resources-finalizer.argocd.argoproj.io
+# spec:
+#   project: miniflux
+#   sources:
+#     - repoURL: 'https://operator.min.io'
+#       chart: tenant
+#       targetRevision: '7.1.1'
+#       helm:
+#         valuesObject:
+#           tenant:
+#             name: "miniflux-db-minio-tenant"
+#           spec:
+#             name:  "miniflux-db-minio"
+#             pools:
+#             - name: "pool-0"
+#               servers: 4
+#               volumesPerServer: 2
+#               size: "1Gi"
+#   destination:
+#     server: https://kubernetes.default.svc
+#     namespace: miniflux
+#   syncPolicy:
+#     syncOptions:
+#     - PreserveResourcesOnDeletion=true
+#     automated:
+#       selfHeal: true
+#       prune: false

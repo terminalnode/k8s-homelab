@@ -1,0 +1,12 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: miniflux-cluster-scheduled-backup
+  labels:
+    app: miniflux
+spec:
+  schedule: "0 30 4 * * *"
+  backupOwnerReference: self
+  method: barmanObjectStore
+  cluster:
+    name: miniflux-cluster

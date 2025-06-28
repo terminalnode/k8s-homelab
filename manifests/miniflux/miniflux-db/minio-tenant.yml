@@ -1,0 +1,48 @@
+apiVersion: minio.min.io/v2
+kind: Tenant
+metadata:
+  name: miniflux-tenant
+  labels:
+    app: miniflux
+spec:
+  configuration:
+    name: miniflux-tenant-conf-secret
+  buckets:
+  - name: 'miniflux-db-backups'
+    objectLock: false
+  image: quay.io/minio/minio:RELEASE.2025-06-13T11-33-47Z
+  imagePullPolicy: IfNotPresent
+  requestAutoCert: false
+  mountPath: /export
+  podManagementPolicy: Parallel
+  serviceAccountName: miniflux-sa
+  pools:
+  - name: "pool-0"
+    servers: 2
+    volumesPerServer: 2
+    volumeClaimTemplate:
+      metadata:
+        name: data
+      spec:
+        accessModes: [ ReadWriteOnce ]
+        resources:
+          requests:
+            storage: 1Gi
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: miniflux-tenant-conf-secret
+stringData:
+  # Should move to a proper secret or something,
+  # but lets do that for the next one... because here
+  # I only stand at risk of losing backups for my RSS reader...
+  config.env: |-
+    export MINIO_ROOT_USER="miniflux"
+    export MINIO_ROOT_PASSWORD="miniflux123"
+  MINIO_ROOT_USER: 'miniflux'
+  MINIO_ROOT_PASSWORD: 'miniflux123'
+type: Opaque
+
