@@ -1,0 +1,47 @@
+apiVersion: minio.min.io/v2
+kind: Tenant
+metadata:
+  name: asciinema-tenant
+  labels:
+    app: asciinema
+spec:
+  configuration:
+    name: asciinema-tenant-conf-secret
+  buckets:
+  - name: 'asciinema-db-backups'
+    objectLock: false
+  image: quay.io/minio/minio:RELEASE.2025-06-13T11-33-47Z
+  imagePullPolicy: IfNotPresent
+  requestAutoCert: false
+  mountPath: /export
+  podManagementPolicy: Parallel
+  serviceAccountName: asciinema-sa
+  pools:
+  - name: "pool-0"
+    servers: 2
+    volumesPerServer: 2
+    volumeClaimTemplate:
+      metadata:
+        name: data
+      spec:
+        accessModes: [ ReadWriteOnce ]
+        resources:
+          requests:
+            storage: 1Gi
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: asciinema-tenant-conf-secret
+stringData:
+  # Should move to a proper secret I guess,
+  # but whatever, it's just asciinema.
+  config.env: |-
+    export MINIO_ROOT_USER="asciinema"
+    export MINIO_ROOT_PASSWORD="asciinema123"
+  MINIO_ROOT_USER: 'asciinema'
+  MINIO_ROOT_PASSWORD: 'asciinema123'
+type: Opaque
+

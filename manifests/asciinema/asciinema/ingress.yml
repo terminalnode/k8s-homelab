@@ -1,31 +1,33 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: photon-ingress
+  name: asciinema-ingress
+  labels:
+    app: asciinema
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod-ciss"
-    kubernetes.io/ingress.class: "traefik" 
+    kubernetes.io/ingress.class: "traefik"
 spec:
   tls:
   - hosts:
-    - phtn.shi.st
-    - phtn.termz.xyz
-    - phtn.terminalnode.xyz
-    secretName: photon-tls-secret
+    - asciinema.shi.st
+    - asciinema.termz.xyz
+    - asciinema.terminalnode.xyz
+    secretName: asciinema-tls-secret
   rules:
-  - host: "phtn.shi.st"
+  - host: "asciinema.shi.st"
     http: &http-routing
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: photon-service
+            name: asciinema-svc
             port:
               number: 80
-  - host: "phtn.termz.xyz"
+  - host: "asciinema.termz.xyz"
     http: *http-routing
-  - host: "phtn.terminalnode.xyz"
+  - host: "asciinema.terminalnode.xyz"
     http: *http-routing
 
 ---
@@ -33,24 +35,26 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: photon-gwai-ingress
+  name: asciinema-dot-gwai-ingress
+  labels:
+    app: asciinema
   annotations:
     cert-manager.io/cluster-issuer: "dot-gwai-ciss"
-    cert-manager.io/common-name: "Gwainet Photon Service"
-    kubernetes.io/ingress.class: "traefik" 
+    cert-manager.io/common-name: "Gwainet Asciinema Service"
+    kubernetes.io/ingress.class: "traefik"
 spec:
   tls:
   - hosts:
-    - phtn.gwai
+    - asciinema.gwai
     secretName: dot-gwai-ca-secret
   rules:
-  - host: "phtn.gwai"
+  - host: "asciinema.gwai"
     http: &http-routing
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: photon-service
+            name: asciinema-svc
             port:
               number: 80

@@ -10,11 +10,12 @@ metadata:
 spec:
   tls:
   - hosts:
+    - mflux.shi.st
     - mflux.termz.xyz
     - mflux.terminalnode.xyz
     secretName: miniflux-tls-secret
   rules:
-  - host: "mflux.termz.xyz"
+  - host: "mflux.shi.st"
     http: &http-routing
       paths:
       - path: /
@@ -24,6 +25,8 @@ spec:
             name: miniflux-svc
             port:
               number: 80
+  - host: "mflux.termz.xyz"
+    http: *http-routing
   - host: "mflux.terminalnode.xyz"
     http: *http-routing
 
