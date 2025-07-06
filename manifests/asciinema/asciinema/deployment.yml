@@ -18,9 +18,19 @@ spec:
       containers:
       - image: ghcr.io/asciinema/asciinema-server:latest
         name: asciinema
+        envFrom:
+        - secretRef:
+            name: asciinema-smtp
+            optional: true
         env:
         - name: SECRET_KEY_BASE
           value: sPQMZ57beqYeXF2xDUNwxqNf9SrEwfzukC7LXPvbGNSWczHPjYFnCEgQ2BCIRP0s
+        - name: URL_HOST
+          value: 'asciinema.shi.st'
+        - name: URL_SCHEME
+          value: 'https'
+        - name: URL_PORT
+          value: '80'
         - name: DB_USER
           valueFrom:
             secretKeyRef:
