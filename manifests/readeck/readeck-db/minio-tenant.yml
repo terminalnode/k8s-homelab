@@ -1,0 +1,47 @@
+apiVersion: minio.min.io/v2
+kind: Tenant
+metadata:
+  name: readeck-tenant
+  labels:
+    app: readeck
+spec:
+  configuration:
+    name: readeck-tenant-conf-secret
+  buckets:
+  - name: 'readeck-db-backups'
+    objectLock: false
+  image: quay.io/minio/minio:RELEASE.2025-06-13T11-33-47Z
+  imagePullPolicy: IfNotPresent
+  requestAutoCert: false
+  mountPath: /export
+  podManagementPolicy: Parallel
+  serviceAccountName: readeck-sa
+  pools:
+  - name: "pool-0"
+    servers: 2
+    volumesPerServer: 2
+    volumeClaimTemplate:
+      metadata:
+        name: data
+      spec:
+        accessModes: [ ReadWriteOnce ]
+        resources:
+          requests:
+            storage: 1Gi
+
+---
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: readeck-tenant-conf-secret
+stringData:
+  # Should move to a proper secret or something,
+  # but lets do that for the next one... or the one after that...
+  config.env: |-
+    export MINIO_ROOT_USER="readeck"
+    export MINIO_ROOT_PASSWORD="readeck123"
+  MINIO_ROOT_USER: 'readeck'
+  MINIO_ROOT_PASSWORD: 'readeck123'
+type: Opaque
+

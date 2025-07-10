@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: readeck
+  name: readeck-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: readeck
+  template:
+    metadata:
+      labels:
+        app: readeck
+    spec:
+      serviceAccountName: readeck-sa
+      volumes:
+      - name: etc-readeck
+        configMap:
+          name: readeck-cm
+      containers:
+      - image: codeberg.org/readeck/readeck:0.19.2
+        name: readeck
+        env:
+        - name: READECK_LOG_LEVEL
+          value: info
+        - name: READECK_SECRET_KEY
+          value: "806812d8-6304-466d-a23e-924d30eb3413"
+        - name: "READECK_SERVER_ALLOWED_HOSTS"
+          value: '"rdck.shi.st","rdck.termz.xyz","rdck.terminalnode.xyz","rdck.gwai"'
+        - name: "READECK_SERVER_TRUSTED_PROXIES"
+          value: "fd88::1"
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: 'readeck-cluster-app'
+              key: 'username'
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: 'readeck-cluster-app'
+              key: 'password'
+        - name: READECK_DATABASE_SOURCE
+          value: "postgres://$(DB_USER):$(DB_PASSWORD)@readeck-cluster-rw:5432/readeck"
+        ports:
+        - name: http
+          containerPort: 8000

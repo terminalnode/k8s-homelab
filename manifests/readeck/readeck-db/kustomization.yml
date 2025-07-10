@@ -1,0 +1,4 @@
+resources:
+- cnpg-cluster.yml
+- minio-tenant.yml
+- cnpg-scheduled-backup.yml

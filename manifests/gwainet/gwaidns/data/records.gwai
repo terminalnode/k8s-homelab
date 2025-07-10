@@ -27,8 +27,9 @@ proxmox    IN CNAME jinjunmei.gwai.
 
 ; Kubernetes service CNAMEs
 phtn   IN CNAME k8s.gwai.
-rss    IN CNAME k8s.gwai.
 argocd IN CNAME k8s.gwai.
+mflux  IN CNAME k8s.gwai.
+rdck   IN CNAME k8s.gwai.
 
 ; Legacy service CNAMEs
 pihole      IN CNAME jinjunmei-legacy.gwai.

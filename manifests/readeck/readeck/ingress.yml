@@ -1,0 +1,60 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: readeck-ingress
+  labels:
+    app: readeck
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod-ciss"
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  tls:
+  - hosts:
+    - rdck.shi.st
+    - rdck.termz.xyz
+    - rdck.terminalnode.xyz
+    secretName: readeck-tls-secret
+  rules:
+  - host: "rdck.shi.st"
+    http: &http-routing
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: readeck-svc
+            port:
+              number: 80
+  - host: "rdck.termz.xyz"
+    http: *http-routing
+  - host: "rdck.terminalnode.xyz"
+    http: *http-routing
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: readeck-dot-gwai-ingress
+  labels:
+    app: readeck
+  annotations:
+    cert-manager.io/cluster-issuer: "dot-gwai-ciss"
+    cert-manager.io/common-name: "Gwainet Readeck Service"
+    kubernetes.io/ingress.class: "traefik"
+spec:
+  tls:
+  - hosts:
+    - rdck.gwai
+    secretName: dot-gwai-ca-secret
+  rules:
+  - host: "rdck.gwai"
+    http: &http-routing
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: readeck-svc
+            port:
+              number: 80

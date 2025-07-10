@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: readeck
+  namespace: argocd
+spec:
+  description: 'App for Readeck'
+  sourceRepos:
+  - 'git@codeberg.org:terminalnode/k8s-homelab.git'
+  - 'https://operator.min.io'
+  destinations:
+  - server: 'https://kubernetes.default.svc'
+    namespace: readeck
+  - server: 'https://kubernetes.default.svc'
+    namespace: argocd
+
+---
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: readeck
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: readeck
+  namespace: argocd
+spec:
+  project: readeck
+  source:
+    repoURL: git@codeberg.org:terminalnode/k8s-homelab.git
+    targetRevision: HEAD
+    path: manifests/readeck/readeck
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: readeck
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: readeck-db
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: readeck
+  sources:
+    - repoURL: git@codeberg.org:terminalnode/k8s-homelab.git
+      targetRevision: HEAD
+      path: manifests/readeck/readeck-db
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: readeck
+  syncPolicy:
+    syncOptions:
+    - PreserveResourcesOnDeletion=true
+    automated:
+      selfHeal: true
+      prune: false
